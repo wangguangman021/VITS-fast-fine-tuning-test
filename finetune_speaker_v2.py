@@ -13,6 +13,8 @@ import torch.distributed as dist
 from torch.nn.parallel import DistributedDataParallel as DDP
 from torch.cuda.amp import autocast, GradScaler
 from tqdm import tqdm
+from fastapi import FastAPI
+import uvicorn
 
 import librosa
 import logging
@@ -367,6 +369,13 @@ def evaluate(hps, generator, eval_loader, writer_eval):
     )
     generator.train()
 
+    app = FastAPI()
 
+    @app.get("/")
+
+    def start_training():
+        main()
+      
+    
 if __name__ == "__main__":
-  main()
+  uvicorn.run(app, host="localhost", port=8080)
